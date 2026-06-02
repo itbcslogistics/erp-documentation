@@ -100,12 +100,12 @@ flowchart TD
     F2 -.-> O1
 
     %% Styling
-    classDef marketing fill:#ffe4e6,stroke:#f43f5e,stroke-width:2px,color:#881337
-    classDef ocs fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e
-    classDef kasir fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#064e3b
-    classDef fms fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
-    classDef driver fill:#fafaf9,stroke:#78716c,stroke-width:2px,color:#44403c
-    classDef startEnd fill:#f5f5f4,stroke:#a8a29e,stroke-width:2px
+    classDef marketing fill:#e11d48,stroke:#be123c,stroke-width:2px,color:#ffffff
+    classDef ocs fill:#0284c7,stroke:#0369a1,stroke-width:2px,color:#ffffff
+    classDef kasir fill:#10b981,stroke:#047857,stroke-width:2px,color:#ffffff
+    classDef fms fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#ffffff
+    classDef driver fill:#78716c,stroke:#57534e,stroke-width:2px,color:#ffffff
+    classDef startEnd fill:#4b5563,stroke:#374151,stroke-width:2px,color:#ffffff
 
     class M1,M3,M4 marketing
     class O1,O2,O3 ocs
@@ -159,8 +159,8 @@ flowchart TD
     A14 --> A15["Status: CANCELED"]
 
     %% Styling
-    classDef marketing fill:#ffe4e6,stroke:#f43f5e,stroke-width:2px,color:#881337
-    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px
+    classDef marketing fill:#e11d48,stroke:#be123c,stroke-width:2px,color:#ffffff
+    classDef db fill:#6366f1,stroke:#4338ca,stroke-width:2px,color:#ffffff
     class A1,A2,A3,A4,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,Start marketing
     class A5 db
 ```
@@ -188,8 +188,8 @@ flowchart TD
     B13 --> B14[("Kirim Data Closing DN ke Kasir")]
 
     %% Styling
-    classDef ocs fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e
-    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px
+    classDef ocs fill:#0284c7,stroke:#0369a1,stroke-width:2px,color:#ffffff
+    classDef db fill:#6366f1,stroke:#4338ca,stroke-width:2px,color:#ffffff
     class Start,B1,B2,B3,B4,B5,B6,B7,B9,B10,B11,B12,B13 ocs
     class B8,B14 db
 ```
@@ -218,8 +218,8 @@ flowchart TD
     C12 --> End(["Selesai"])
 
     %% Styling
-    classDef kasir fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#064e3b
-    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px
+    classDef kasir fill:#10b981,stroke:#047857,stroke-width:2px,color:#ffffff
+    classDef db fill:#6366f1,stroke:#4338ca,stroke-width:2px,color:#ffffff
     class Start,End,C1,C2,C3,C4,C5,C6,C8,C9,C10,C11 kasir
     class C7,C12 db
 ```
@@ -243,7 +243,7 @@ flowchart TD
     D4 -.->|"Kirim info unit siap jalan"| OCS["OCS"]
 
     %% Styling
-    classDef fms fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef fms fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#ffffff
     class Start,D1,D2,D3,D4,D5,D6,Marketing,OCS fms
 ```
 
