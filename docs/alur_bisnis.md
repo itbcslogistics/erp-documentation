@@ -52,34 +52,34 @@ flowchart TD
     Start(["Mulai"]) --> M1
     
     %% Marketing
-    subgraph Marketing Module
+    subgraph "Marketing Module"
         M1["Buat Sales Order<br/>Status: WAITING_UJO"] :::marketing
         M3["Input Tarif & Kirim ke Customer<br/>Status: WAITING_CUSTOMER"] :::marketing
         M4["Konfirmasi Customer Deal<br/>Status: READY_TO_DISPATCH"] :::marketing
     end
 
     %% OCS
-    subgraph OCS Module
+    subgraph "OCS Module"
         O1["Assign Unit & Driver + Input UJO<br/>Status: WAITING_TARIFF"] :::ocs
         O2["Finalisasi Dispatch<br/>Status: DISPATCHED"] :::ocs
         O3["Terima Surat Jalan & Input Realisasi<br/>Status: COMPLETED"] :::ocs
     end
 
     %% Kasir
-    subgraph Kasir Module
+    subgraph "Kasir Module"
         K1["Pencairan Uang Jalan UJO<br/>ujo_payment_status = PAID"] :::kasir
         K2["Pelunasan Biaya Tambahan<br/>closing_payment_status = PAID"] :::kasir
     end
 
     %% Driver Execution
-    subgraph Driver Journey
+    subgraph "Driver Journey"
         D1["Ambil Unit & Jalan ke Origin (Loading)"] :::driver
         D2["Perjalanan ke Destination (Unloading)"] :::driver
         D3["Kembali ke Pool (Bawa Surat Jalan)"] :::driver
     end
 
     %% FMS Monitoring
-    subgraph FMS (Fleet Management System)
+    subgraph "FMS (Fleet Management System)"
         F1["Monitor Posisi Kendaraan & Live Map"] :::fms
         F2["Update Status Ketersediaan Unit"] :::fms
     end
