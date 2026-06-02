@@ -39,7 +39,11 @@ extra:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed
   - pymdownx.emoji
   - attr_list
@@ -48,6 +52,7 @@ markdown_extensions:
 nav:
   - Beranda: index.md
   - Dashboard Portal: dashboard.md
+  - Alur Bisnis ERP: alur_bisnis.md
   - Modul ERP:
       - FMS (Fleet Management): fms.md
       - OCS (Operations Hub): ocs.md
