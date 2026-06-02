@@ -1,0 +1,60 @@
+site_name: Dokumentasi ERP BCS Labs
+site_url: https://erp.bcslabs.tech/
+site_description: Panduan Lengkap Penggunaan Sistem ERP BCS Labs beserta fitur, menu, dan alur kerja aplikasi.
+
+theme:
+  name: material
+  language: id
+  palette:
+    # Mode Terang
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Ubah ke mode gelap
+    # Mode Gelap
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Ubah ke mode terang
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra:
+  social:
+    - icon: material/web
+      link: https://erp.bcslabs.tech/
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.emoji
+  - attr_list
+  - md_in_html
+
+nav:
+  - Beranda: index.md
+  - Dashboard Portal: dashboard.md
+  - Modul ERP:
+      - FMS (Fleet Management): fms.md
+      - OCS (Operations Hub): ocs.md
+      - HRIS (Human Capital): hris.md
+      - Marketing (Growth Engine): marketing.md
+      - PMS (Procurement): pms.md
+      - Kasir (Cash & Payment): kasir.md
+      - Finance (Economic Control): finance.md
+      - DMS (Document Asset): dms.md
+      - QHSE (Quality & Safety): qhse.md
