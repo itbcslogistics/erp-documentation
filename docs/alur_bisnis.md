@@ -40,48 +40,40 @@ Alur bisnis ERP berpusat pada siklus hidup **Sales Order (SO)**, dimulai dari in
 
 ```mermaid
 flowchart TD
-    %% Styling
-    classDef marketing fill:#ffe4e6,stroke:#f43f5e,stroke-width:2px,color:#881337;
-    classDef ocs fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
-    classDef kasir fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#064e3b;
-    classDef fms fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e3a8a;
-    classDef driver fill:#fafaf9,stroke:#78716c,stroke-width:2px,color:#44403c;
-    classDef startEnd fill:#f5f5f4,stroke:#a8a29e,stroke-width:2px;
-
     %% Nodes
     Start(["Mulai"]) --> M1
     
     %% Marketing
     subgraph "Marketing Module"
-        M1["Buat Sales Order<br/>Status: WAITING_UJO"] :::marketing
-        M3["Input Tarif & Kirim ke Customer<br/>Status: WAITING_CUSTOMER"] :::marketing
-        M4["Konfirmasi Customer Deal<br/>Status: READY_TO_DISPATCH"] :::marketing
+        M1["Buat Sales Order<br/>Status: WAITING_UJO"]
+        M3["Input Tarif & Kirim ke Customer<br/>Status: WAITING_CUSTOMER"]
+        M4["Konfirmasi Customer Deal<br/>Status: READY_TO_DISPATCH"]
     end
 
     %% OCS
     subgraph "OCS Module"
-        O1["Assign Unit & Driver + Input UJO<br/>Status: WAITING_TARIFF"] :::ocs
-        O2["Finalisasi Dispatch<br/>Status: DISPATCHED"] :::ocs
-        O3["Terima Surat Jalan & Input Realisasi<br/>Status: COMPLETED"] :::ocs
+        O1["Assign Unit & Driver + Input UJO<br/>Status: WAITING_TARIFF"]
+        O2["Finalisasi Dispatch<br/>Status: DISPATCHED"]
+        O3["Terima Surat Jalan & Input Realisasi<br/>Status: COMPLETED"]
     end
 
     %% Kasir
     subgraph "Kasir Module"
-        K1["Pencairan Uang Jalan UJO<br/>ujo_payment_status = PAID"] :::kasir
-        K2["Pelunasan Biaya Tambahan<br/>closing_payment_status = PAID"] :::kasir
+        K1["Pencairan Uang Jalan UJO<br/>ujo_payment_status = PAID"]
+        K2["Pelunasan Biaya Tambahan<br/>closing_payment_status = PAID"]
     end
 
     %% Driver Execution
     subgraph "Driver Journey"
-        D1["Ambil Unit & Jalan ke Origin (Loading)"] :::driver
-        D2["Perjalanan ke Destination (Unloading)"] :::driver
-        D3["Kembali ke Pool (Bawa Surat Jalan)"] :::driver
+        D1["Ambil Unit & Jalan ke Origin (Loading)"]
+        D2["Perjalanan ke Destination (Unloading)"]
+        D3["Kembali ke Pool (Bawa Surat Jalan)"]
     end
 
     %% FMS Monitoring
     subgraph "FMS (Fleet Management System)"
-        F1["Monitor Posisi Kendaraan & Live Map"] :::fms
-        F2["Update Status Ketersediaan Unit"] :::fms
+        F1["Monitor Posisi Kendaraan & Live Map"]
+        F2["Update Status Ketersediaan Unit"]
     end
 
     %% Flow Connections
@@ -107,9 +99,20 @@ flowchart TD
     F2 -.-> M1
     F2 -.-> O1
 
-    %% Legend
-    style Start fill:#fafaf9,stroke:#78716c,stroke-width:1px
-    style End fill:#fafaf9,stroke:#78716c,stroke-width:1px
+    %% Styling
+    classDef marketing fill:#ffe4e6,stroke:#f43f5e,stroke-width:2px,color:#881337
+    classDef ocs fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e
+    classDef kasir fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#064e3b
+    classDef fms fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    classDef driver fill:#fafaf9,stroke:#78716c,stroke-width:2px,color:#44403c
+    classDef startEnd fill:#f5f5f4,stroke:#a8a29e,stroke-width:2px
+
+    class M1,M3,M4 marketing
+    class O1,O2,O3 ocs
+    class K1,K2 kasir
+    class D1,D2,D3 driver
+    class F1,F2 fms
+    class Start,End startEnd
 ```
 
 ---
@@ -139,24 +142,27 @@ Fokus utama Marketing adalah membuat pesanan, mengelola tarif untuk customer, da
 
 ```mermaid
 flowchart TD
-    classDef marketing fill:#ffe4e6,stroke:#f43f5e,stroke-width:2px,color:#881337;
-    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px;
+    Start(["Mulai"]) --> A1["Pilih Customer"]
+    A1 --> A2["Tentukan Rute: Origin & Destination"]
+    A2 --> A3["Pilih Jenis Unit Truk"]
+    A3 --> A4["Input Detail Muatan & Tanggal Kirim"]
+    A4 --> A5[("Simpan Order Baru")]
+    A5 --> A6["Status: WAITING_UJO"]
+    A6 --> A7["Tunggu OCS Assign Unit & UJO"]
+    A7 --> A8["Dapatkan Estimasi UJO dari OCS"]
+    A8 --> A9["Input Tarif Penjualan ke Customer"]
+    A9 --> A10["Kirim Quotation ke Customer"]
+    A10 --> A11{"Customer Deal?"}
+    A11 -- "Ya" --> A12["Konfirmasi Order"]
+    A12 --> A13["Status: READY_TO_DISPATCH"]
+    A11 -- "Tidak" --> A14["Batalkan / Edit Order"]
+    A14 --> A15["Status: CANCELED"]
 
-    Start(["Mulai"]) --> A1["Pilih Customer"] :::marketing
-    A1 --> A2["Tentukan Rute: Origin & Destination"] :::marketing
-    A2 --> A3["Pilih Jenis Unit Truk"] :::marketing
-    A3 --> A4["Input Detail Muatan & Tanggal Kirim"] :::marketing
-    A4 --> A5[("Simpan Order Baru")] :::db
-    A5 --> A6["Status: WAITING_UJO"] :::marketing
-    A6 --> A7["Tunggu OCS Assign Unit & UJO"] :::marketing
-    A7 --> A8["Dapatkan Estimasi UJO dari OCS"] :::marketing
-    A8 --> A9["Input Tarif Penjualan ke Customer"] :::marketing
-    A9 --> A10["Kirim Quotation ke Customer"] :::marketing
-    A10 --> A11{"Customer Deal?"} :::marketing
-    A11 -- Ya --> A12["Konfirmasi Order"] :::marketing
-    A12 --> A13["Status: READY_TO_DISPATCH"] :::marketing
-    A11 -- Tidak --> A14["Batalkan / Edit Order"] :::marketing
-    A14 --> A15["Status: CANCELED"] :::marketing
+    %% Styling
+    classDef marketing fill:#ffe4e6,stroke:#f43f5e,stroke-width:2px,color:#881337
+    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px
+    class A1,A2,A3,A4,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,Start marketing
+    class A5 db
 ```
 
 ---
@@ -166,23 +172,26 @@ OCS berfokus pada operasional fisik: menetapkan kendaraan & supir, menghitung ua
 
 ```mermaid
 flowchart TD
-    classDef ocs fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
-    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px;
+    Start(["Terima Order WAITING_UJO"]) --> B1["Pilih Unit Truk & Driver yang Tersedia"]
+    B1 --> B2["Input Komponen UJO:<br/>1. Uang Makan<br/>2. Uang Tol<br/>3. Uang Pokok"]
+    B2 --> B3["Status berubah: WAITING_TARIFF"]
+    B3 --> B4["Tunggu Marketing Deal dengan Customer"]
+    B4 --> B5["Terima Notifikasi: READY_TO_DISPATCH"]
+    B5 --> B6["Klik Tombol Finalize & Send UJO"]
+    B6 --> B7["Status berubah: DISPATCHED"]
+    B7 --> B8[("Kirim Data UJO ke Kasir")]
+    B8 --> B9["Supir Jalan & Lakukan Pengiriman"]
+    B9 --> B10["Supir Kembali & Serahkan Surat Jalan"]
+    B10 --> B11["Klik Closing Dispatch"]
+    B11 --> B12["Input Berat Aktual (Real Weight) & Beban Tambahan jika ada"]
+    B12 --> B13["Status berubah: COMPLETED"]
+    B13 --> B14[("Kirim Data Closing DN ke Kasir")]
 
-    Start(["Terima Order WAITING_UJO"]) --> B1["Pilih Unit Truk & Driver yang Tersedia"] :::ocs
-    B1 --> B2["Input Komponen UJO:<br/>1. Uang Makan<br/>2. Uang Tol<br/>3. Uang Pokok"] :::ocs
-    B2 --> B3["Status berubah: WAITING_TARIFF"] :::ocs
-    B3 --> B4["Tunggu Marketing Deal dengan Customer"] :::ocs
-    B4 --> B5["Terima Notifikasi: READY_TO_DISPATCH"] :::ocs
-    B5 --> B6["Klik Tombol Finalize & Send UJO"] :::ocs
-    B6 --> B7["Status berubah: DISPATCHED"] :::ocs
-    B7 --> B8[("Kirim Data UJO ke Kasir")] :::db
-    B8 --> B9["Supir Jalan & Lakukan Pengiriman"] :::ocs
-    B9 --> B10["Supir Kembali & Serahkan Surat Jalan"] :::ocs
-    B10 --> B11["Klik Closing Dispatch"] :::ocs
-    B11 --> B12["Input Berat Aktual (Real Weight) & Beban Tambahan jika ada"] :::ocs
-    B12 --> B13["Status berubah: COMPLETED"] :::ocs
-    B13 --> B14[("Kirim Data Closing DN ke Kasir")] :::db
+    %% Styling
+    classDef ocs fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e
+    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px
+    class Start,B1,B2,B3,B4,B5,B6,B7,B9,B10,B11,B12,B13 ocs
+    class B8,B14 db
 ```
 
 ---
@@ -192,24 +201,27 @@ Kasir bertanggung jawab penuh terhadap aliran uang masuk dan keluar terkait oper
 
 ```mermaid
 flowchart TD
-    classDef kasir fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#064e3b;
-    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px;
-
-    Start(["Mulai"]) --> C1["Tinjau Antrean UJO di Fitur UJO"] :::kasir
-    C1 --> C2{"Apakah Dispatch Sudah Finalized?"} :::kasir
-    C2 -- Belum --> C3["Data Belum Ditampilkan di Kasir"] :::kasir
-    C2 -- Sudah --> C4["Tampilkan Data UJO dengan status UNPAID"] :::kasir
-    C4 --> C5["Klik Tombol Cairkan"] :::kasir
-    C5 --> C6["Serahkan Uang Jalan Fisik ke Supir"] :::kasir
-    C6 --> C7[("Update Database:<br/>ujo_payment_status = PAID")] :::db
+    Start(["Mulai"]) --> C1["Tinjau Antrean UJO di Fitur UJO"]
+    C1 --> C2{"Apakah Dispatch Sudah Finalized?"}
+    C2 -- "Belum" --> C3["Data Belum Ditampilkan di Kasir"]
+    C2 -- "Sudah" --> C4["Tampilkan Data UJO dengan status UNPAID"]
+    C4 --> C5["Klik Tombol Cairkan"]
+    C5 --> C6["Serahkan Uang Jalan Fisik ke Supir"]
+    C6 --> C7[("Update Database:<br/>ujo_payment_status = PAID")]
 
     %% Closing Section
-    C7 --> C8["Tunggu OCS melakukan Closing Dispatch"] :::kasir
-    C8 --> C9["Tinjau Antrean Closing DN"] :::kasir
-    C9 --> C10["Periksa Selisih Tonnage & Beban Biaya Tambahan"] :::kasir
-    C10 --> C11["Klik Pelunasan / Closing DN"] :::kasir
-    C11 --> C12[("Update Database:<br/>closing_payment_status = PAID")] :::db
+    C7 --> C8["Tunggu OCS melakukan Closing Dispatch"]
+    C8 --> C9["Tinjau Antrean Closing DN"]
+    C9 --> C10["Periksa Selisih Tonnage & Beban Biaya Tambahan"]
+    C10 --> C11["Klik Pelunasan / Closing DN"]
+    C11 --> C12[("Update Database:<br/>closing_payment_status = PAID")]
     C12 --> End(["Selesai"])
+
+    %% Styling
+    classDef kasir fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#064e3b
+    classDef db fill:#f5f5f4,stroke:#78716c,stroke-width:2px
+    class Start,End,C1,C2,C3,C4,C5,C6,C8,C9,C10,C11 kasir
+    class C7,C12 db
 ```
 
 ---
@@ -219,18 +231,20 @@ FMS bertindak sebagai modul monitoring pasif dan manajemen aset. FMS melacak kon
 
 ```mermaid
 flowchart TD
-    classDef fms fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e3a8a;
-
-    Start(["Mulai"]) --> D1["Overview & Command Center"] :::fms
-    D1 --> D2["Live Map: Lacak Lokasi GPS Truk Real-Time"] :::fms
-    D1 --> D3["Route History: Riwayat Perjalanan Armada"] :::fms
-    D1 --> D4["Master Unit & Driver: Kelola Ketersediaan & Status"] :::fms
-    D1 --> D5["Maintenance & Service: Jadwal Oli, Ban, Sparepart"] :::fms
-    D1 --> D6["Fuel & Expenses Tracking"] :::fms
+    Start(["Mulai"]) --> D1["Overview & Command Center"]
+    D1 --> D2["Live Map: Lacak Lokasi GPS Truk Real-Time"]
+    D1 --> D3["Route History: Riwayat Perjalanan Armada"]
+    D1 --> D4["Master Unit & Driver: Kelola Ketersediaan & Status"]
+    D1 --> D5["Maintenance & Service: Jadwal Oli, Ban, Sparepart"]
+    D1 --> D6["Fuel & Expenses Tracking"]
 
     %% Hubungan ke modul lain
-    D4 -.->|"Kirim info unit siap jalan"| Marketing:::fms
-    D4 -.->|"Kirim info unit siap jalan"| OCS:::fms
+    D4 -.->|"Kirim info unit siap jalan"| Marketing["Marketing"]
+    D4 -.->|"Kirim info unit siap jalan"| OCS["OCS"]
+
+    %% Styling
+    classDef fms fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#1e3a8a
+    class Start,D1,D2,D3,D4,D5,D6,Marketing,OCS fms
 ```
 
 ---
