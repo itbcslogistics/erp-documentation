@@ -194,6 +194,12 @@ def run():
         page-break-before: avoid; /* Beranda (index) langsung setelah cover page */
     }}
     
+    /* CSS Helper untuk mencegah heading yatim piatu (orphan heading) */
+    .avoid-break {{
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }}
+    
     /* Typography */
     h1 {{
         font-size: 18pt;
@@ -232,10 +238,11 @@ def run():
         margin-bottom: 6px;
     }}
     
-    /* Gambar Screenshot */
+    /* Gambar Screenshot Premium & Auto-fit */
     img {{
         max-width: 100%;
-        height: auto;
+        max-height: 160mm; /* Batasi agar screenshot tinggi tidak menjorok ke halaman baru */
+        object-fit: contain;
         border: 1px solid #cbd5e1;
         border-radius: 4px;
         margin: 15px 0;
@@ -250,6 +257,9 @@ def run():
         margin: 20px 0;
         font-size: 9.5pt;
         page-break-inside: avoid;
+    }}
+    tr {{
+        page-break-inside: avoid; /* Baris tabel tidak boleh terpotong di tengah halaman */
     }}
     th, td {{
         border: 1px solid #cbd5e1;
@@ -286,12 +296,16 @@ def run():
         color: #92400e;
     }}
     
-    /* Mermaid Diagram */
+    /* Mermaid Diagram & Auto-scale */
     .mermaid {{
         display: flex;
         justify-content: center;
         margin: 25px 0;
         page-break-inside: avoid;
+    }}
+    .mermaid svg {{
+        max-width: 100% !important; /* Mencegah bagan melebar memotong kertas kanan */
+        height: auto !important;
     }}
 </style>
 </head>
@@ -315,6 +329,26 @@ def run():
 </body>
 </html>
 """
+
+    # Post-processing HTML: Bungkus setiap Heading yang diikuti langsung oleh diagram Mermaid atau gambar 
+    # di dalam kontainer <div class="avoid-break"> agar mereka terdorong bersamaan ke halaman berikutnya (mencegah orphan heading)
+    print("Mencegah pemotongan diagram alur dan heading...")
+    
+    # 1. Bungkus heading diikuti oleh Mermaid diagram
+    combined_body_html = re.sub(
+        r'(<h[1-6][^>]*>.*?</h[1-6]>)\s*(<div class="mermaid">.*?</div>)',
+        r'<div class="avoid-break">\1\2</div>',
+        combined_body_html,
+        flags=re.DOTALL
+    )
+    
+    # 2. Bungkus heading diikuti oleh Gambar (dalam tag paragraph atau langsung img)
+    combined_body_html = re.sub(
+        r'(<h[1-6][^>]*>.*?</h[1-6]>)\s*(<p>\s*<img[^>]*>\s*</p>|<img[^>]*>)',
+        r'<div class="avoid-break">\1\2</div>',
+        combined_body_html,
+        flags=re.DOTALL
+    )
 
     temp_html_path = "temp_print_docs.html"
     with open(temp_html_path, "w", encoding="utf-8") as f:
