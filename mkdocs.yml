@@ -51,6 +51,7 @@ markdown_extensions:
 
 nav:
   - Beranda: index.md
+  - Proposal & Latar Belakang: latar_belakang.md
   - Dashboard Portal: dashboard.md
   - Alur Bisnis ERP: alur_bisnis.md
   - Modul ERP:
