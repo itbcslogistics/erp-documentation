@@ -107,7 +107,7 @@ def run():
 <style>
     @page {{
         size: A4;
-        margin: 0; /* Biarkan Playwright menangani margin halaman secara penuh */
+        margin: 25mm 20mm 25mm 20mm;
     }}
     body {{
         font-family: 'Inter', sans-serif;
@@ -117,77 +117,79 @@ def run():
         background-color: #ffffff;
     }}
     
-    /* Cover Page - Didesain khusus muat penuh dalam 1 halaman A4 */
+    /* Cover Page - Format Asli dengan Margin Diperkecil */
     .cover-page {{
-        page-break-after: always;
-        page-break-inside: avoid;
-        text-align: center;
-        padding-top: 30mm;
-        box-sizing: border-box;
+        height: 90vh;
         display: flex;
         flex-direction: column;
-        height: 235mm; /* Tinggi maksimal area cetak A4 setelah dikurangi margin */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        page-break-after: always;
+        padding-top: 50px; /* Diperkecil dari 100px */
     }}
     .logo {{
-        font-size: 16pt;
+        font-size: 18pt;
         font-weight: 700;
         color: #2563eb;
         letter-spacing: 2px;
-        margin-bottom: 25mm;
+        margin-bottom: 60px;
     }}
     .cover-title {{
         font-size: 24pt;
         font-weight: 800;
         color: #1e3a8a;
-        margin-bottom: 8mm;
+        margin-bottom: 20px;
         text-transform: uppercase;
         line-height: 1.3;
+        max-width: 650px;
     }}
     .cover-subtitle {{
-        font-size: 12pt;
+        font-size: 13pt;
         color: #475569;
-        margin-bottom: 35mm;
+        margin-bottom: 60px; /* Diperkecil dari 120px agar muat dalam 1 halaman */
+        max-width: 550px;
         font-weight: 400;
     }}
     .cover-meta {{
-        font-size: 10pt;
+        font-size: 10.5pt;
         color: #334155;
         border-top: 2px solid #e2e8f0;
-        padding-top: 10mm;
+        padding-top: 30px;
+        width: 80%;
         text-align: left;
-        width: 100%;
-        margin-top: auto; /* Tarik metadata ke bagian bawah halaman sampul */
+        margin-top: auto;
     }}
     .cover-meta p {{
-        margin: 4px 0;
+        margin: 6px 0;
     }}
     
     /* Content Typography */
     .content {{
-        padding-top: 10mm;
+        padding-top: 20px;
     }}
     h1 {{
         font-size: 18pt;
         color: #1e3a8a;
         border-bottom: 2px solid #3b82f6;
         padding-bottom: 6px;
-        margin-top: 30px;
+        margin-top: 35px;
         margin-bottom: 15px;
         page-break-after: avoid;
         page-break-before: always;
     }}
     .content > h1:first-of-type {{
-        page-break-before: avoid; /* H1 pertama langsung setelah cover page */
+        page-break-before: avoid; /* Jangan beri pagebreak pada judul utama pertama */
     }}
     h2 {{
-        font-size: 13.5pt;
+        font-size: 14pt;
         color: #0f172a;
         margin-top: 25px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         page-break-after: avoid;
     }}
     h3 {{
-        font-size: 11pt;
+        font-size: 11.5pt;
         color: #1e293b;
         margin-top: 20px;
         margin-bottom: 8px;
